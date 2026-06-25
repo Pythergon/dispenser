@@ -75,13 +75,9 @@ these land.
 ### PneumaticActuator
 
 (The self-assignment no-op, missing `status` update, constructor `pinMode`,
-and boot-safe state are already fixed on the review branch — these are what's
-left.)
+and boot-safe state are already fixed on the review branch, and the active-low
+relay behaviour is now documented in code comments. Remaining:)
 
-- **Name the active-low relay polarity.** `LOW` = extend / `HIGH` = retract is
-  an implicit convention scattered across the methods; hoist it to a named
-  constant (e.g. `RELAY_ACTIVE = LOW`) so the wiring assumption is explicit and
-  trivial to flip for an active-high module.
 - **Replace or remove the `bool status` field.** It's vague and never read. If
   a position readback is useful, model it as `enum class Position { Retracted,
   Extended }` with an accessor; otherwise drop it. (`extend()` / `retract()`
