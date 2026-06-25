@@ -16,6 +16,7 @@ class RGBLed {
     public:
         bool status;
         RGBLed(int redPin, int greenPin);
+        void begin();
         void idleStatus();
         void activeStatus();
 };

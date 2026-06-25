@@ -3,18 +3,19 @@
 *   Toggle the relay pin for the piston
 */
 
-#ifndef PNUEMATIC_ACTUATOR_H
-#define PNUEMATIC_ACTUATOR_H
+#ifndef PNEUMATIC_ACTUATOR_H
+#define PNEUMATIC_ACTUATOR_H
 
 #include <Arduino.h>
 
-class PnuematicActuator {
+class PneumaticActuator {
     private:
         int relayPin;
 
     public:
         bool status;
-        PnuematicActuator(int relayPin);
+        PneumaticActuator(int relayPin);
+        void begin();
         void extend();
         void retract();
 };

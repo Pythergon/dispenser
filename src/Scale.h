@@ -1,6 +1,6 @@
 /*
-*   Class Responsibilty   
-*   Initalize and Read Sensor Data
+*   Class Responsibility
+*   Initialize and Read Sensor Data
 */
 
 #ifndef SCALE_H
@@ -14,13 +14,13 @@ class Scale {
         int DTPin;
 		int SCKPin;
 		HX711* scale;
-		float scale_offset;
+		float calibrationFactor;
 
     public:
         float sensorData;
-        Scale(HX711* scale, int DTPin, int SCKPin, float scale_offset);
+        Scale(HX711* scale, int DTPin, int SCKPin, float calibrationFactor);
         void begin();
-        void initalizeScale();
+        void initializeScale();
         void tare();
         void readData(int dt = 100);
 };

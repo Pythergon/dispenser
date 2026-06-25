@@ -1,26 +1,26 @@
 /*
-*   Class Responsibilty
+*   Class Responsibility
 *   Orchestrate the dispenser parts
 */
 
 #include "DispenserController.h"
 
-DispenserController::DispenserController(Scale* scale, RGBLed* rgbLed, PnuematicActuator* pnuematicActuator) {
+DispenserController::DispenserController(Scale* scale, RGBLed* rgbLed, PneumaticActuator* pneumaticActuator) {
     this->scale = scale;
     this->rgbLed = rgbLed;
-    this->pnuematicActuator = pnuematicActuator;
+    this->pneumaticActuator = pneumaticActuator;
 }
 
 void DispenserController::update() {
     this->scale->readData();
 
-    if (this->scale->sensorData >10) {
-        this->pnuematicActuator->extend();
+    if (this->scale->sensorData > dispenseThreshold) {
+        this->pneumaticActuator->extend();
         this->rgbLed->activeStatus();
-        delay(150);
+        delay(dispenseHoldMs);
         this->scale->tare();
     } else {
         this->rgbLed->idleStatus();
-        this->pnuematicActuator->retract();
+        this->pneumaticActuator->retract();
     }
 }

@@ -8,9 +8,12 @@
 RGBLed::RGBLed(int redPin, int greenPin) {
     this->redPin = redPin;
     this->greenPin = greenPin;
+}
 
+void RGBLed::begin() {
     pinMode(this->redPin, OUTPUT);
     pinMode(this->greenPin, OUTPUT);
+    idleStatus();
 }
 
 void RGBLed::idleStatus() {
@@ -20,7 +23,7 @@ void RGBLed::idleStatus() {
 }
 
 void RGBLed::activeStatus() {
-    this->status = false;
+    this->status = true;
     digitalWrite(this->redPin, HIGH);
     digitalWrite(this->greenPin, LOW);
 }
