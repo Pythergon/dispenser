@@ -18,11 +18,13 @@ The diagram source is [`diagrams/class-diagram.mmd`](diagrams/class-diagram.mmd)
 mmdc -i diagrams/class-diagram.mmd -o diagrams/class-diagram.png
 ```
 
-## TODO — `Scale` class follow-ups
+## TODO — follow-ups
 
 Best-practice cleanups identified during review but not yet applied
 (tracked here rather than changed in code). Update the class diagram once
 these land.
+
+### Scale
 
 - **Encapsulate the HX711.** Own it by value as a member instead of taking
   a non-owning `HX711*`. `Scale` is its only consumer, so the pointer also
@@ -53,3 +55,19 @@ these land.
   settle delay.
 - **Document the unit assumption** — `get_units()` only returns grams if
   `calibrationFactor` is calibrated to grams.
+
+### RGBLed (indicator)
+
+- **Replace `idleStatus()` / `activeStatus()` with a single
+  `setStatus(Status)`** taking an `enum class Status { Idle, Active }` (room
+  for `Off` / `Error` later). One setter, and the state is named rather than
+  implied by which method you call.
+- **Replace the `bool status` field with the `Status` enum.** A bool can't
+  represent the real state space (off / green / red), and the single-setter
+  form structurally removes the current "both methods set `status`" bug — the
+  field just gets assigned the argument.
+- **Rename the class `RGBLed` → `IndicatorLed`.** It drives a two-colour
+  (red/green) indicator, not a 3-channel RGB LED — and the instance is already
+  called `indicatorLed`.
+- **Move `pinMode()` out of the constructor into `begin()`** (same global
+  static-init concern noted for the other classes).
