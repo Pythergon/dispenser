@@ -1,0 +1,57 @@
+classDiagram
+    class DispenserController {
+        -Scale* scale
+        -RGBLed* rgbLed
+        -PneumaticActuator* pneumaticActuator
+        -int dispenseThreshold$
+        -int dispenseHoldMs$
+        +DispenserController(Scale*, RGBLed*, PneumaticActuator*)
+        +update() void
+    }
+
+    class Scale {
+        -int DTPin
+        -int SCKPin
+        -HX711* scale
+        -float calibrationFactor
+        +float sensorData
+        +Scale(HX711*, int DTPin, int SCKPin, float calibrationFactor)
+        +begin() void
+        +initializeScale() void
+        +tare() void
+        +readData(int dt=100) void
+    }
+
+    class RGBLed {
+        -int redPin
+        -int greenPin
+        +bool status
+        +RGBLed(int redPin, int greenPin)
+        +begin() void
+        +idleStatus() void
+        +activeStatus() void
+    }
+
+    class PneumaticActuator {
+        -int relayPin
+        +bool status
+        +PneumaticActuator(int relayPin)
+        +begin() void
+        +extend() void
+        +retract() void
+    }
+
+    class HX711 {
+        <<library>>
+        +begin(byte dout, byte pd_sck) void
+        +is_ready() bool
+        +read() long
+        +set_scale(float) void
+        +tare() void
+        +get_units() float
+    }
+
+    DispenserController o--> Scale : scale
+    DispenserController o--> RGBLed : rgbLed
+    DispenserController o--> PneumaticActuator : pneumaticActuator
+    Scale o--> HX711 : scale
