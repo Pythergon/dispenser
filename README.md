@@ -21,8 +21,12 @@ mmdc -i diagrams/class-diagram.mmd -o diagrams/class-diagram.png
 ## TODO — follow-ups
 
 Best-practice cleanups identified during review but not yet applied
-(tracked here rather than changed in code). Update the class diagram once
-these land.
+(tracked here rather than changed in code). The diagram below shows the
+target architecture once they all land:
+
+![Proposed class diagram](diagrams/class-diagram-proposed.png)
+
+Source: [`diagrams/class-diagram-proposed.mmd`](diagrams/class-diagram-proposed.mmd).
 
 ### Scale
 

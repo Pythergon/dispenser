@@ -1,0 +1,74 @@
+%% Proposed/target architecture — the README "TODO — follow-ups" applied.
+%% The current code is in class-diagram.mmd.
+classDiagram
+    class Dispenser {
+        -Scale scale
+        -IndicatorLed indicatorLed
+        -PneumaticActuator actuator
+        -int dispenseThresholdGrams$
+        -int dispenseHoldMs$
+        +Dispenser(Config config)
+        +begin() void
+        +update() void
+    }
+
+    class Config {
+        +int loadCellDT
+        +int loadCellSCK
+        +float calibrationFactor
+        +int redPin
+        +int greenPin
+        +int relayPin
+    }
+
+    class Scale {
+        -int dtPin
+        -int sckPin
+        -HX711 hx711
+        -float calibrationFactor
+        +Scale(int dtPin, int sckPin, float calibrationFactor)
+        +begin() void
+        +initialize() bool
+        +tare() void
+        +readGrams() float
+    }
+
+    class IndicatorLed {
+        -int redPin
+        -int greenPin
+        -Status status
+        +IndicatorLed(int redPin, int greenPin)
+        +begin() void
+        +setStatus(Status status) void
+    }
+
+    class Status {
+        <<enumeration>>
+        Idle
+        Active
+    }
+
+    class PneumaticActuator {
+        -int relayPin
+        +PneumaticActuator(int relayPin)
+        +begin() void
+        +extend() void
+        +retract() void
+    }
+
+    class HX711 {
+        <<library>>
+        +begin(byte dout, byte pd_sck) void
+        +is_ready() bool
+        +read() long
+        +set_scale(float) void
+        +tare() void
+        +get_units() float
+    }
+
+    Dispenser *--> Scale : scale
+    Dispenser *--> IndicatorLed : indicatorLed
+    Dispenser *--> PneumaticActuator : actuator
+    Dispenser ..> Config : configured by
+    Scale *--> HX711 : hx711
+    IndicatorLed ..> Status : uses
