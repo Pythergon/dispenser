@@ -82,3 +82,24 @@ relay behaviour is now documented in code comments. Remaining:)
   a position readback is useful, model it as `enum class Position { Retracted,
   Extended }` with an accessor; otherwise drop it. (`extend()` / `retract()`
   are already good action-verb names — no rename needed.)
+
+### DispenserController
+
+- **Move initialization onto the controller.** Add a `begin()` that brings the
+  parts up in the right order (actuator to its safe state first, then LED, then
+  `scale.begin()` + `initialize()`), so `setup()` just calls
+  `controller.begin()` and doesn't need to know the sequence.
+- **Drop the `Controller` suffix** → `Dispenser`. It's the top-level domain
+  object; the suffix is redundant noise, especially once it owns its parts.
+- **Own its parts instead of taking injected pointers.** The `Scale`,
+  indicator LED, and actuator are used only by the controller, so it could
+  compose them by value (built from a small pin/calibration config struct) and
+  hide them from `main.cpp` — shrinking `main` to "declare config, call
+  `begin()` / `update()`." Tradeoff: pin wiring moves out of `main` (Arduino's
+  conventional home for it) into the config/constructor, and DI's testability
+  benefit is theoretical here (no test harness; the parts aren't virtual). Same
+  reasoning as the Scale/HX711 item — lean toward ownership for consistency.
+- **Behavioural questions (from the review):** the per-trigger `tare()` can
+  accumulate zero drift, and the loop is fully blocking (`readData`'s delay +
+  the 150 ms hold) so the hold time is an open-loop guess rather than a measured
+  dose.
