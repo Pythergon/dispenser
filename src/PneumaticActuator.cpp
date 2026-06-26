@@ -19,11 +19,13 @@ void PneumaticActuator::begin() {
 }
 
 void PneumaticActuator::extend() {
+    // Active-low relay: driving the pin LOW energizes it and extends the piston.
     this->status = true;
     digitalWrite(this->relayPin, LOW);
 }
 
 void PneumaticActuator::retract() {
+    // HIGH de-energizes the relay, retracting the piston (the safe state).
     this->status = false;
     digitalWrite(this->relayPin, HIGH);
 }
